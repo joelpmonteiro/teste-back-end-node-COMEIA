@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import { route_avaliacao } from "../routes";
+import route from "../routes/route";
 const app = express();
 
 app.use(express.json());
@@ -25,5 +25,5 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use("/", route_avaliacao);
+app.use("/", route);
 export { app };

@@ -1,11 +1,11 @@
-import { Db } from "mongodb";
-import { IAvalicao } from "../interface";
+import { IUser } from "../interface";
 import mongo from "../mongodb/mongo";
+import { Db } from "mongodb";
 import { env } from "../config/env";
 
-class AvalicaoADO {
+class UserADO {
   private conn: Db | undefined;
-  private collection = "avalicao";
+  private collection = "user";
   constructor() {
     this.init();
   }
@@ -29,9 +29,25 @@ class AvalicaoADO {
           equals: id,
         },
       });
-      console.log("con1: ", con);
       return con;
     } catch (error) {
+      throw error;
+    }
+  }
+
+  async showByEmail(email: string): Promise<number | undefined> {
+    try {
+      const con = await this.conn
+        ?.collection(this.collection)
+        .find({ email: email });
+
+      // verifica a quantidade de linhas para definir se achou ou nao o usuario pelo email
+      const countItens = await this.conn
+        ?.collection(this.collection)
+        .countDocuments({ email: email });
+      return countItens;
+    } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -60,7 +76,7 @@ class AvalicaoADO {
     }
   }
 
-  async update(data: IAvalicao) {
+  async update(data: IUser) {
     try {
       //const con = this.conn?.collection(this.collection).updateOne({})
       //console.log("con: ", con);
@@ -70,10 +86,10 @@ class AvalicaoADO {
     }
   }
 
-  async createAvalicao(data: IAvalicao) {
+  async createAvalicao(data: IUser) {
     try {
-      const con = this.conn?.collection(this.collection).insertOne(data);
-      console.log("con: ", con);
+      const con = await this.conn?.collection(this.collection).insertOne(data);
+      console.log(con);
       return con;
     } catch (error) {
       throw error;
@@ -81,4 +97,4 @@ class AvalicaoADO {
   }
 }
 
-export default new AvalicaoADO();
+export default new UserADO();
