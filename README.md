@@ -2,15 +2,15 @@
 
 # Etapas
 
-- Avalição: -> ✅
-  cadastrar, editar, excluir e listar; -> ✅
+•  Avalição: -> ✅
+  • cadastrar, editar, excluir e listar; -> ✅
 
-- Usuario: -> ✅
-  cadastrar, editar, excluir e listar; -> ✅
+•  Usuario: -> ✅
+  • cadastrar, editar, excluir e listar; -> ✅
 
-- Autenticação -> ✅
+•  Autenticação -> ✅
 
-- Estrutura tabela MongoDB -> ✅
+•  Estrutura tabela MongoDB -> ✅
   • id: ID da avaliação. -> ✅
   • userId: ID do usuário que fez a avaliação. -> ✅
   • rating: Nota da avaliação (1 a 5). -> ✅
