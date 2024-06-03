@@ -1,0 +1,770 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API de avaliações",
+    "description": "E uma API para teste de back end",
+    "contact": {
+      "name": "Joel de paula monteiro",
+      "email": "joelpmonteiro50@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Autenticação (JWT)",
+      "description": "JWT Token"
+    },
+    {
+      "name": "Avaliação",
+      "description": "Crud de Avaliações"
+    },
+    {
+      "name": "Usuário",
+      "description": "Crud de Usuários"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": [
+          "Autenticação (JWT)"
+        ],
+        "description": "Criar uma Autorização JWT",
+        "requestBody": {
+          "description": "Dados necessários para cadastro",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResponseUserLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Não foi encontrado esse usuario para autenticar"
+          },
+          "400": {
+            "description": "Dados do usuario invalidos!"
+          },
+          "422": {
+            "description": "Dados invalidos, envios corretamente"
+          },
+          "500": {
+            "description": "Erro ao criar o jwt"
+          },
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserMsgJWT"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/create-review": {
+      "post": {
+        "tags": [
+          "Avaliação"
+        ],
+        "description": "Criar uma avaliação",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Dados necessários para cadastro",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestAvaliacao"
+              }
+            }
+          }
+        },
+        "responses": {
+          "403": {
+            "description": "Token de autenticação não informado"
+          },
+          "401": {
+            "description": "Falha na autorização"
+          },
+          "400": {
+            "description": "Erro ao validar autenticação"
+          },
+          "422": {
+            "description": "Dados invalidos, envios corretamente"
+          },
+          "500": {
+            "description": "Erro no processa criação da avaliação"
+          },
+          "201": {
+            "description": "Avaliação criado com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAvaliacao"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/find-all-reviews": {
+      "get": {
+        "tags": [
+          "Avaliação"
+        ],
+        "description": "Busca todas avaliações",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Token de autenticação não informado"
+          },
+          "401": {
+            "description": "Falha na autorização"
+          },
+          "400": {
+            "description": "Erro ao validar autenticação"
+          },
+          "422": {
+            "description": "Dados invalidos, envios corretamente"
+          },
+          "500": {
+            "description": "Erro ao processar criação da avaliação"
+          },
+          "404": {
+            "description": "Não foi encontrado avaliações"
+          },
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseAvaliacaoGet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/find-byId-review/{id}": {
+      "get": {
+        "tags": [
+          "Avaliação"
+        ],
+        "description": "Busca uma avaliação por id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id da avaliação",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Token de autenticação não informado"
+          },
+          "401": {
+            "description": "Falha na autorização"
+          },
+          "400": {
+            "description": "Erro ao validar autenticação"
+          },
+          "422": {
+            "description": "Dados invalidos, envios corretamente"
+          },
+          "500": {
+            "description": "Erro ao processar criação da avaliação"
+          },
+          "404": {
+            "description": "Não foi encontrado avaliações"
+          },
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAvaliacaoGet"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/delete-review/{id}": {
+      "delete": {
+        "tags": [
+          "Avaliação"
+        ],
+        "description": "Deleta uma avaliação por id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id da avaliação",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Token de autenticação não informado"
+          },
+          "401": {
+            "description": "Falha na autorização"
+          },
+          "400": {
+            "description": "Erro ao validar autenticação"
+          },
+          "422": {
+            "description": "Dados invalidos, envios corretamente"
+          },
+          "500": {
+            "description": "Erro ao processar criação da avaliação"
+          },
+          "404": {
+            "description": "Não foi encontrado avaliações"
+          },
+          "200": {
+            "description": "Avaliação deletado com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAvaliacaoMsg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/update-review/{id}": {
+      "put": {
+        "tags": [
+          "Avaliação"
+        ],
+        "description": "Atualiza uma avaliação por id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id da avaliação",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Dados necessários para atualizar",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestAvaliacao"
+              }
+            }
+          }
+        },
+        "responses": {
+          "403": {
+            "description": "Token de autenticação não informado"
+          },
+          "401": {
+            "description": "Falha na autorização"
+          },
+          "400": {
+            "description": "Erro ao validar autenticação"
+          },
+          "422": {
+            "description": "Dados invalidos, envios corretamente"
+          },
+          "500": {
+            "description": "Erro ao processar criação da avaliação"
+          },
+          "404": {
+            "description": "Não foi encontrado avaliações"
+          },
+          "201": {
+            "description": "Avaliação deletado com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAvaliacaoMsg"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Avaliação atualizada com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAvaliacaoMsg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/create-user": {
+      "post": {
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Criar um usuário",
+        "requestBody": {
+          "description": "Dados necessários para cadastro",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "403": {
+            "description": "Token de autenticação não informado"
+          },
+          "401": {
+            "description": "Falha na autorização"
+          },
+          "400": {
+            "description": "Erro ao validar autenticação"
+          },
+          "422": {
+            "description": "Dados invalidos, envios corretamente"
+          },
+          "500": {
+            "description": "Erro nome processa criação da Usuário"
+          },
+          "201": {
+            "description": "Usuário criado com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUser"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/find-all-users": {
+      "get": {
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Busca todas usuários",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Token de autenticação não informado"
+          },
+          "401": {
+            "description": "Falha na autorização"
+          },
+          "400": {
+            "description": "Erro ao validar autenticação"
+          },
+          "422": {
+            "description": "Dados invalidos, envios corretamente"
+          },
+          "500": {
+            "description": "Erro no processa busca do usuário"
+          },
+          "404": {
+            "description": "Não foi encontrado usuário"
+          },
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseUserGet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/find-byId-user/{id}": {
+      "get": {
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Busca um usuario por id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Token de autenticação não informado"
+          },
+          "401": {
+            "description": "Falha na autorização"
+          },
+          "400": {
+            "description": "Erro ao validar autenticação"
+          },
+          "422": {
+            "description": "Dados invalidos, envios corretamente"
+          },
+          "500": {
+            "description": "Erro no processa busca do usuário"
+          },
+          "404": {
+            "description": "Não foi encontrado usuário"
+          },
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserGet"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/delete-user/{id}": {
+      "delete": {
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Deleta um usuário por id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id da usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Token de autenticação não informado"
+          },
+          "401": {
+            "description": "Falha na autorização"
+          },
+          "400": {
+            "description": "Erro ao validar autenticação"
+          },
+          "422": {
+            "description": "Dados invalidos, envios corretamente"
+          },
+          "500": {
+            "description": "Erro no processa de deletar o usuário"
+          },
+          "404": {
+            "description": "Não foi encontrado usuário"
+          },
+          "200": {
+            "description": "Usuário criado com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserMsg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/update-user/{id}": {
+      "put": {
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Atualiza um usuário por id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id da usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Dados necessários para atualizar",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "403": {
+            "description": "Token de autenticação não informado"
+          },
+          "401": {
+            "description": "Falha na autorização"
+          },
+          "400": {
+            "description": "Erro ao validar autenticação"
+          },
+          "422": {
+            "description": "Dados invalidos, envios corretamente"
+          },
+          "500": {
+            "description": "Erro no processa atualização do usuário"
+          },
+          "404": {
+            "description": "Não foi encontrado usuário"
+          },
+          "201": {
+            "description": "Usuário criado com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserMsg"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "User atualizada com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserMsg"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RequestAvaliacao": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "Id do usuario",
+            "example": ""
+          },
+          "rating": {
+            "type": "number",
+            "description": "Nota da avaliação (1 a 5)",
+            "example": ""
+          },
+          "comment": {
+            "type": "string",
+            "description": "Comentario da avaliação",
+            "example": ""
+          }
+        }
+      },
+      "ResponseAvaliacao": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id da avaliação"
+          }
+        }
+      },
+      "ResponseAvaliacaoGet": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Id da avaliação"
+          },
+          "userId": {
+            "type": "string",
+            "description": "Id do usuario",
+            "example": ""
+          },
+          "rating": {
+            "type": "number",
+            "description": "Nota da avaliação (1 a 5)",
+            "example": ""
+          },
+          "comment": {
+            "type": "string",
+            "description": "Comentario da avaliação",
+            "example": ""
+          }
+        }
+      },
+      "ResponseAvaliacaoMsg": {
+        "type": "object",
+        "properties": {
+          "msg": {
+            "type": "string",
+            "description": "mensagem de retorno da api"
+          }
+        }
+      },
+      "RequestUser": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "email do usuário",
+            "example": ""
+          },
+          "nome": {
+            "type": "string",
+            "description": "nome do usuário",
+            "example": ""
+          },
+          "senha": {
+            "type": "string",
+            "description": "senha do usuário",
+            "example": ""
+          }
+        }
+      },
+      "ResponseUser": {
+        "type": "object",
+        "properties": {
+          "user_nome": {
+            "type": "string",
+            "description": "nome do usuário"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "id do usuário"
+          }
+        }
+      },
+      "ResponseUserLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "email do usuário"
+          },
+          "password": {
+            "type": "string",
+            "description": "senha do usuário"
+          }
+        }
+      },
+      "ResponseUserGet": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Id da usuário"
+          },
+          "email": {
+            "type": "string",
+            "description": "email do usuário",
+            "example": ""
+          },
+          "nome": {
+            "type": "string",
+            "description": "nome do usuário",
+            "example": ""
+          },
+          "senha": {
+            "type": "string",
+            "description": "senha do usuário",
+            "example": ""
+          }
+        }
+      },
+      "ResponseUserMsg": {
+        "type": "object",
+        "properties": {
+          "msg": {
+            "type": "string",
+            "description": "mensagem de retorno da api"
+          }
+        }
+      },
+      "ResponseUserMsgJWT": {
+        "type": "object",
+        "properties": {
+          "msg": {
+            "type": "string",
+            "description": "mensagem de retorno da api"
+          },
+          "token": {
+            "type": "string",
+            "description": "JWT usado para as outras rotas"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "description": "Autenticação utilizando JWT",
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

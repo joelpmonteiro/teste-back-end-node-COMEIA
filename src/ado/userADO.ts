@@ -1,6 +1,6 @@
-import { IUser } from "../interface";
+import { IUser, IUserMongo } from "../interface";
 import mongo from "../mongodb/mongo";
-import { Db } from "mongodb";
+import { Db, Document, ObjectId, WithId } from "mongodb";
 import { env } from "../config/env";
 
 class UserADO {
@@ -24,28 +24,27 @@ class UserADO {
 
   async showById(id: number) {
     try {
-      const con = this.conn?.collection(this.collection).findOne({
-        _id: {
-          equals: id,
-        },
-      });
+      const con = (await this.conn
+        ?.collection(this.collection)
+        .findOne(
+          { _id: ObjectId.createFromHexString(id.toString()) },
+          { projection: { _id: 1, email: 1, nome: 1 } }
+        )) as WithId<IUserMongo | Document> | null | undefined;
       return con;
     } catch (error) {
       throw error;
     }
   }
 
-  async showByEmail(email: string): Promise<number | undefined> {
+  async showByEmail(email: string) {
     try {
-      const con = await this.conn
-        ?.collection(this.collection)
-        .find({ email: email });
+      const con = this.conn?.collection(this.collection).find({ email: email });
 
       // verifica a quantidade de linhas para definir se achou ou nao o usuario pelo email
       const countItens = await this.conn
         ?.collection(this.collection)
         .countDocuments({ email: email });
-      return countItens;
+      return con;
     } catch (error) {
       console.log(error);
       throw error;
@@ -54,8 +53,10 @@ class UserADO {
 
   async index() {
     try {
-      const con = this.conn?.collection(this.collection).find();
-      console.log("con: ", con);
+      const con = this.conn
+        ?.collection<IUserMongo[]>(this.collection)
+        .find({})
+        .project<IUserMongo[]>({ _id: 1, email: 1, nome: 1 });
       return con;
     } catch (error) {
       throw error;
@@ -64,24 +65,34 @@ class UserADO {
 
   async delete(id: number) {
     try {
-      const con = this.conn?.collection(this.collection).deleteOne({
-        _id: {
-          equals: id,
-        },
-      });
-      console.log("con: ", con);
+      const con = await this.conn
+        ?.collection(this.collection)
+        .deleteOne({ _id: ObjectId.createFromHexString(id.toString()) });
       return con;
     } catch (error) {
       throw error;
     }
   }
 
-  async update(data: IUser) {
+  async update(data: IUser, id: number) {
     try {
-      //const con = this.conn?.collection(this.collection).updateOne({})
+      const filter = { _id: ObjectId.createFromHexString(id.toString()) };
+      const options = { upsert: true };
+
+      const updateDoc = {
+        $set: {
+          email: data.email,
+          nome: data.nome,
+          senha: data.senha,
+        },
+      };
+
+      const con = await this.conn
+        ?.collection(this.collection)
+        .updateOne(filter, updateDoc, options);
       //console.log("con: ", con);
-      return "";
-    } catch (error) {
+      return con;
+    } catch (error: any) {
       throw error;
     }
   }

@@ -1,4 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "../../swagger.json";
 import route from "../routes/route";
 const app = express();
 
@@ -9,8 +11,11 @@ app.use(
   })
 );
 
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/", route);
+
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  res.setHeader("Access-Control-Allow-Origin", "8");
+  res.setHeader("Access-Control-Allow-Origin", "*");
 
   res.header(
     "Access-Control-Allow-Headers",
@@ -25,5 +30,4 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use("/", route);
 export { app };
