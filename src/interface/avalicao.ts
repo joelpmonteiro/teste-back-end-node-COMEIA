@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 
 export type IAvalicao = {
-  userId: number | ObjectId;
+  userId: number | ObjectId | string;
   rating: number;
   comment: string;
 };

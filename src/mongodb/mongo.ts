@@ -4,7 +4,10 @@ class Mongo {
   private connect: MongoClient;
   constructor() {
     console.log("conectou");
-    this.connect = new MongoClient(env.mongodb);
+    this.connect = new MongoClient(
+      env.mongodb || (process.env.mongodb as string)
+    );
+
     this.createDB();
   }
 
@@ -17,7 +20,9 @@ class Mongo {
   }
 
   createDB() {
-    const dbUri = `${env.mongodb}${env.database}`;
+    const database: string = env.database || (process.env.database as string);
+    const mongoDb: string = env.mongodb || (process.env.mongodb as string);
+    const dbUri = `${mongoDb}${database}`;
     MongoClient.connect(dbUri)
       .then((result) => {
         this.connect = result;
@@ -29,8 +34,10 @@ class Mongo {
 
   async createCollection(collectionName: string) {
     try {
+      const database: string = env.database || (process.env.database as string);
+
       const db = await this.connect.connect();
-      const collectionExist = db.db(env.database); //verifica se db existe e a collection
+      const collectionExist = db.db(database); //verifica se db existe e a collection
 
       const collectionInfo = await collectionExist
         .listCollections({ name: collectionName })
@@ -48,6 +55,7 @@ class Mongo {
       console.log(`Collection created with the name ${collectionName}`);
       this.connect.close();
     } catch (error: any) {
+      console.log(error);
       this.connect.close();
       throw error;
     }

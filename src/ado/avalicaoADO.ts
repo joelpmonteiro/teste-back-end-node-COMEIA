@@ -14,20 +14,19 @@ class AvalicaoADO {
       .getConnect()
       .connect()
       .then((result) => {
-        this.conn = result.db(env.database);
+        this.conn = result.db(process.env.database); //env.database
       })
       .catch((err) => {
         console.log(err);
-        throw err;
       });
   }
 
-  async showById(id: number) {
+  async showById(id: string) {
     try {
       const con = (await this.conn
         ?.collection(this.collection)
         .findOne(
-          { _id: ObjectId.createFromHexString(id.toString()) },
+          { _id: ObjectId.createFromHexString(id) },
           { projection: { _id: 1, userId: 1, rating: 1, comment: 1 } }
         )) as WithId<IAvalicaoShow | Document> | null | undefined;
       return con;
@@ -48,20 +47,20 @@ class AvalicaoADO {
     }
   }
 
-  async delete(id: number) {
+  async delete(id: string) {
     try {
       const con = await this.conn
         ?.collection(this.collection)
-        .deleteOne({ _id: ObjectId.createFromHexString(id.toString()) });
+        .deleteOne({ _id: ObjectId.createFromHexString(id) });
       return con;
     } catch (error) {
       throw error;
     }
   }
 
-  async update(data: IAvalicao, id: number) {
+  async update(data: IAvalicao, id: string) {
     try {
-      const filter = { _id: ObjectId.createFromHexString(id.toString()) };
+      const filter = { _id: ObjectId.createFromHexString(id) };
       const options = { upsert: true };
 
       const updateDoc = {
@@ -81,9 +80,11 @@ class AvalicaoADO {
     }
   }
 
-  async createAvalicao(data: IAvalicao) {
+  async createAvaliacao(data: IAvalicao) {
     try {
+      console.log("dados", data);
       const con = await this.conn?.collection(this.collection).insertOne(data);
+
       return con;
     } catch (error) {
       throw error;

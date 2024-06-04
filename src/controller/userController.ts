@@ -27,9 +27,9 @@ class UserController {
 
   async showById(req: Request, res: Response) {
     try {
-      const { id } = req.params as any as { id: number };
+      const { id } = req.params as any as { id: string };
 
-      const show = await UserAdo.showById(id);
+      const show = await UserAdo.showById(id.toString());
 
       if (show === null || show === undefined) {
         return res
@@ -101,7 +101,7 @@ class UserController {
           .json({ msg: "Já existe um usuario com esse email" });
 
       user.senha = await hashPassword(user.senha);
-      const createUser = await UserAdo.createAvalicao(user);
+      const createUser = await UserAdo.createUser(user);
 
       if (createUser === null)
         //verifica se deu erro ao criar usuario

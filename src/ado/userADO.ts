@@ -17,19 +17,22 @@ class UserADO {
         this.conn = result.db(env.database);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         throw err;
       });
   }
 
-  async showById(id: number) {
+  async showById(id: string): Promise<any> {
     try {
+      console.log(id);
       const con = (await this.conn
         ?.collection(this.collection)
         .findOne(
-          { _id: ObjectId.createFromHexString(id.toString()) },
+          { _id: new ObjectId("665bc28b9ab190b62af31d3f") },
           { projection: { _id: 1, email: 1, nome: 1 } }
         )) as WithId<IUserMongo | Document> | null | undefined;
+
+      console.log(con?._id);
       return con;
     } catch (error) {
       throw error;
@@ -97,7 +100,7 @@ class UserADO {
     }
   }
 
-  async createAvalicao(data: IUser) {
+  async createUser(data: IUser) {
     try {
       const con = await this.conn?.collection(this.collection).insertOne(data);
       console.log(con);

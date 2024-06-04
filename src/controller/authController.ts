@@ -12,6 +12,7 @@ class AuthController {
     try {
       const login: ILogin = req.body;
       const auth = await UserAdo.showByEmail(login.email);
+      console.log(auth?.id);
       const authArr = (await auth?.toArray()) as WithId<
         IUserMongo | Document
       >[];

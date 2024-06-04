@@ -27,7 +27,7 @@ class AvalicaoController {
 
   async showById(req: Request, res: Response) {
     try {
-      const { id } = req.params as any as { id: number };
+      const { id } = req.params as any as { id: string };
 
       const show = await AvalicaoAdo.showById(id);
       if (show === null || show === undefined) {
@@ -47,7 +47,7 @@ class AvalicaoController {
       const { id } = req.params as any as { id: number };
       const avalicaoUpdate: IAvalicao = req.body;
 
-      const updateAv = await AvalicaoAdo.update(avalicaoUpdate, id);
+      const updateAv = await AvalicaoAdo.update(avalicaoUpdate, id.toString());
       if (updateAv?.modifiedCount === 1 && updateAv?.matchedCount === 1) {
         return res
           .status(200)
@@ -70,7 +70,7 @@ class AvalicaoController {
 
   async delete(req: Request, res: Response) {
     try {
-      const { id } = req.params as any as { id: number };
+      const { id } = req.params as any as { id: string };
 
       const deleteAv = await AvalicaoAdo.delete(id);
       if (deleteAv === undefined || deleteAv.deletedCount === 0) {
@@ -96,7 +96,7 @@ class AvalicaoController {
       avalicao.userId = ObjectId.createFromHexString(
         avalicao.userId.toString()
       );
-      const result = await AvalicaoAdo.createAvalicao(avalicao);
+      const result = await AvalicaoAdo.createAvaliacao(avalicao);
       if (result === null || result === undefined) {
         return res.status(404).json({ msg: "erro ao criar avaliação" });
       }
