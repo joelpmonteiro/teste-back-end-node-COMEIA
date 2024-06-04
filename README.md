@@ -15,7 +15,9 @@ pnpm install (Preferencialmente usado no projeto)
 # yarn
 yarn install
 ```
-
+### Swagger
+#### Rota para verificar o swagger
+```- http://localhost:3333/docs/```
 ### Configurações de ambiente
 #### primeiro renomeie o arquivo (.env.example) para (.env) e adicionei essas configurações
 - Atenção e importante adicionar o nome da database (pois ela será criada automaticamente)
@@ -68,5 +70,5 @@ Requisitos
 - Validação dos dados de entrada; -> ✅
 - Tratamento de erros; -> ✅
 - Rotas protegidas: Padrão Bearer Authentication; -> ✅
-- Testes unitários: Jest
-- Testes de integração: Supertest
+- Testes unitários: Jest. -> ✅
+- Testes de integração: Supertest. -> ✅
